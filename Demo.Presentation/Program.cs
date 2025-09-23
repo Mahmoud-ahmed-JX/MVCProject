@@ -1,3 +1,6 @@
+using BuisnessLogic.Profiles;
+using BuisnessLogic.Services.Classes;
+using BuisnessLogic.Services.Interfaces;
 using DataAccess.Data.context;
 using DataAccess.Data.Repositories.Classes;
 using DataAccess.Data.Repositories.Interfaces;
@@ -22,7 +25,10 @@ namespace Demo.Presentation
             });
 
             builder.Services.AddScoped<IDepartmentRepository, DepartmentRepository>();
-
+            builder.Services.AddScoped<IDepartmentService, DepartmentService>();
+            builder.Services.AddScoped<IEmployeeRepository, EmployeeRepository>();
+            builder.Services.AddScoped<IEmployeeServices, EmployeeServices>();
+            builder.Services.AddAutoMapper(mapper => mapper.AddProfile(new MappingProfile()));
             var app = builder.Build();
 
             // Configure the HTTP request pipeline.

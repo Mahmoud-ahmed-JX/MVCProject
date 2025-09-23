@@ -5,9 +5,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace BuisnessLogic.DTOS
+namespace BuisnessLogic.DTOS.DepartmentDtos
 {
-    internal class DepartmentDetailsDto
+    public class DepartmentDetailsDto
     {
         public int Id { get; set; }
 

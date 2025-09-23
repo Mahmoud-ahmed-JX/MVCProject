@@ -1,4 +1,4 @@
-﻿using BuisnessLogic.DTOS;
+﻿using BuisnessLogic.DTOS.DepartmentDtos;
 using DataAccess.Models;
 using Microsoft.Identity.Client;
 using System;
