@@ -12,21 +12,27 @@ using System.Threading.Tasks;
 
 namespace BuisnessLogic.Services.Classes
 {
-    public class EmployeeServices(IEmployeeRepository _employees,IMapper _mapper) : IEmployeeServices
+    public class EmployeeServices(IUnitOfWork _unitOfWork,IMapper _mapper) : IEmployeeServices
 
     {
         public int CreateEmployee(CreatedEmployeeDto employeeDto)
         {
            var employee= _mapper.Map<CreatedEmployeeDto,Employee>(employeeDto);
-           return _employees.Add(employee);
-
+            _unitOfWork.Employees.Add(employee);
+            return _unitOfWork.SaveChanges();
         }
 
-        
+      
 
-        public IEnumerable<EmployeeDto> GetAllEmployees(bool withTracking = false)
+        public IEnumerable<EmployeeDto> GetAllEmployees(string? EmployeeSearchName,bool withTracking = false)
         {
-            var employees = _employees.GetAll(withTracking);
+            IEnumerable<Employee> employees;
+            if (!string.IsNullOrWhiteSpace(EmployeeSearchName))
+            {
+                employees = _unitOfWork.Employees.GetAll(e => e.Name.ToLower().Contains(EmployeeSearchName.ToLower()));
+            }
+            else
+                employees = _unitOfWork.Employees.GetAll(withTracking);
                 //.Select(
                 //    e => _mapper.Map<EmployeeDto>(e)
                 //);
@@ -52,7 +58,7 @@ namespace BuisnessLogic.Services.Classes
 
         public EmployeeDetailsDto? GetEmployeeById(int id)
         {
-            var employee = _employees.GetById(id);
+            var employee = _unitOfWork.Employees.GetById(id);
             if (employee is null) return null;
             else
                 return _mapper.Map<Employee,EmployeeDetailsDto>(employee);
@@ -78,16 +84,21 @@ namespace BuisnessLogic.Services.Classes
 
         public int UpdatedEmployee(UpdatedEmployeeDto employeeDto)
         {
-            return _employees.Update(_mapper.Map<UpdatedEmployeeDto, Employee>(employeeDto));
+             _unitOfWork.Employees.Update(_mapper.Map<UpdatedEmployeeDto, Employee>(employeeDto));
+            return _unitOfWork.SaveChanges();
+
         }
 
         public bool DeleteEmployee(int id)
         {
-            var employee = _employees.GetById(id);
+            var employee = _unitOfWork.Employees.GetById(id);
             if (employee is null) return false;
 
-            employee.IsActive = false;
-            return _employees.Update(employee)>0;
+            employee.IsDeleted = true;
+            _unitOfWork.Employees.Update(employee);
+          
+            return _unitOfWork.SaveChanges()>0;
+
         }
 
     }

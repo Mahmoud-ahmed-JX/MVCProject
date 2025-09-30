@@ -21,5 +21,8 @@ namespace BuisnessLogic.DTOS.EmployeeDtos
         public string Gender { get; set; }
         [Display(Name = "Employee Type")]
         public string EmployeeType { get; set; }
+        [Display(Name = "Department Name")]
+
+        public string? DepartmentName { get; set; }
     }
 }

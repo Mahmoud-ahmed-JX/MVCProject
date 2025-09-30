@@ -1,15 +1,10 @@
 ﻿using DataAccess.Models.EmployeeModule;
 using DataAccess.Models.Shared;
-using System;
-using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
-namespace BuisnessLogic.DTOS.EmployeeDtos
+namespace Demo.Presentation.ViewModels
 {
-    public class UpdatedEmployeeDto
+    public class EmployeeViewModel
     {
         public int Id { get; set; }
         [Required(ErrorMessage = "Name Can't Be Null")]
@@ -43,7 +38,7 @@ namespace BuisnessLogic.DTOS.EmployeeDtos
         public Gender Gender { get; set; }
 
         public EmployeeType EmployeeType { get; set; }
+        [Display(Name = "Department")]
         public int? DepartmentId { get; set; }
-
     }
 }

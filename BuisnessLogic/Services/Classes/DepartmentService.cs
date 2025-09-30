@@ -10,14 +10,14 @@ using System.Threading.Tasks;
 
 namespace BuisnessLogic.Services.Classes
 {
-    public class DepartmentService(IDepartmentRepository _departmentRepository) : IDepartmentService
+    public class DepartmentService(IUnitOfWork _unitOfWork) : IDepartmentService
     {
         //private readonly IDepartmentRepository _departmentRepository = departmentRepository;
 
         //Get All =>Id , Code , Name , Description , DateOfCreation
         public IEnumerable<DepartmentDto> GetAllDepartments()
         {
-            var departments = _departmentRepository.GetAll();
+            var departments = _unitOfWork.Departments.GetAll();
             return departments.Select(d => d.ToDepartmentDto());
 
         }
@@ -25,7 +25,7 @@ namespace BuisnessLogic.Services.Classes
         //Get By Id
         public DepartmentDetailsDto? GetDepartmentById(int id)
         {
-            var department = _departmentRepository.GetById(id);
+            var department = _unitOfWork.Departments.GetById(id);
             if (department is null)
                 return null;
             //Auto Mapping => Package [AutoMapper]
@@ -38,24 +38,25 @@ namespace BuisnessLogic.Services.Classes
         {
             var department = departmentDto.ToEntity();
 
-            return _departmentRepository.Add(department);
-
+             _unitOfWork.Departments.Add(department);
+            return _unitOfWork.SaveChanges();
         }
 
         //Update
         public int UpdateDepartment(UpdatedDepartmentDto departmentDto)
         {
-            return _departmentRepository.Update(departmentDto.ToEntity());
+            _unitOfWork.Departments.Update(departmentDto.ToEntity());
+            return _unitOfWork.SaveChanges();
         }
 
         //Delete
         public bool DeleteDepartment(int id)
         {
-            var department = _departmentRepository.GetById(id);
+            var department = _unitOfWork.Departments.GetById(id);
             if (department is null)
                 return false;
-            int numOfRows = _departmentRepository.Remove(department);
-            return numOfRows > 0;
+             _unitOfWork.Departments.Remove(department);
+            return _unitOfWork.SaveChanges() > 0;
         }
     }
 }

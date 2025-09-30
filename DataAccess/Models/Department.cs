@@ -14,5 +14,6 @@ namespace DataAccess.Models
 
         public string? Description { get; set; }
 
+        public virtual ICollection<EmployeeModule.Employee> Employees { get; set; }
     }
 }

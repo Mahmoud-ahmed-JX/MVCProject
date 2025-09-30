@@ -6,6 +6,7 @@ using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -17,35 +18,44 @@ namespace DataAccess.Data.Repositories.Classes
         {
             if (withTracking)
             {
-                return _dbContext.Set<TEntity>().ToList();
+                return _dbContext.Set<TEntity>().Where(entity=>entity.IsDeleted==false).ToList();
             }
             else
             {
-                return _dbContext.Set<TEntity>().AsNoTracking().ToList();
+                return _dbContext.Set<TEntity>().Where(entity => entity.IsDeleted == false).AsNoTracking().ToList();
             }
         }
+        public IEnumerable<TEntity> GetAll(Expression<Func<TEntity, bool>> expression)
+        {
+            
+                return _dbContext.Set<TEntity>().Where(expression).Where(entity => entity.IsDeleted == false).ToList();
+            
+          
+        }
+
+
         //GetById
         public TEntity? GetById(int Id) => _dbContext.Set<TEntity>().Find(Id);
 
         //Add
-        public int Add(TEntity entity)
+        public void Add(TEntity entity)
         {
             _dbContext.Set<TEntity>().Add(entity);
-            return _dbContext.SaveChanges();
+           
         }
 
         //Update
-        public int Update(TEntity entity)
+        public void Update(TEntity entity)
         {
             _dbContext.Set<TEntity>().Update(entity);
-            return _dbContext.SaveChanges();
+         
         }
 
         //Remove
-        public int Remove(TEntity entity)
+        public void Remove(TEntity entity)
         {
             _dbContext.Set<TEntity>().Remove(entity);
-            return _dbContext.SaveChanges();
+            
         }
     }
 }

@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -9,11 +10,13 @@ namespace DataAccess.Data.Repositories.Interfaces
 {
     public interface IGenericRepository<TEntity> where TEntity: BaseEntity 
     {
-        int Add(TEntity department);
+        void Add(TEntity department);
         IEnumerable<TEntity> GetAll(bool withTracking = false);
+        IEnumerable<TEntity> GetAll(Expression<Func<TEntity, bool>> expression);
+
         TEntity? GetById(int Id);
-        int Remove(TEntity department);
-        int Update(TEntity department);
+        void Remove(TEntity department);
+        void Update(TEntity department);
     }
 
 

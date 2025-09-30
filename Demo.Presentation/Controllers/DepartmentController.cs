@@ -14,6 +14,7 @@ namespace Demo.Presentation.Controllers
         #region Index
         public IActionResult Index()
         {
+            ViewData["message"] = new DepartmentDto() { Name="Test"};
             var departments = _departmentService.GetAllDepartments();
             return View(departments);
         }
@@ -27,20 +28,32 @@ namespace Demo.Presentation.Controllers
             return View();
         }
         [HttpPost]
-        public IActionResult Create(CreateDepartmentDto departmentDto)
+        public IActionResult Create(DepartmentViewModel departmentDto)
         {
             if (ModelState.IsValid)
             {
                 try {
-                    var res = _departmentService.AddDepartment(departmentDto);
+                    var res = _departmentService.AddDepartment(new CreateDepartmentDto
+                    {
+                        Name = departmentDto.Name,
+                        Code = departmentDto.Code,
+                        Description = departmentDto.Description,
+                        DateOfCreation = departmentDto.CreatedOn
 
+                    });
+                    string message;
                     if (res > 0)
-                        return RedirectToAction(nameof(Index));
+                    {
+                        message = "Department Created Successfully";
+                    }
                     else
                     {
-                        ModelState.AddModelError("", "Department Can not be created");
+                        //ModelState.AddModelError("", "Department Can not be created");
+                        message = "Department Can not be created";
 
                     }
+                        TempData["message"] = message;
+                        return RedirectToAction(nameof(Index));
                 }
                 catch (Exception ex) {
                     if (_env.IsDevelopment())
@@ -88,7 +101,7 @@ namespace Demo.Presentation.Controllers
 
             if(department is null)
                 return NotFound();
-            DepartmentEditViewModel dep = new DepartmentEditViewModel()
+            DepartmentViewModel dep = new DepartmentViewModel()
             {
                 Code = department.Code,
                 Name = department.Name,
@@ -99,7 +112,7 @@ namespace Demo.Presentation.Controllers
         }
 
         [HttpPost]
-        public IActionResult Edit([FromRoute]int? Id,DepartmentEditViewModel department) {
+        public IActionResult Edit([FromRoute]int? Id,DepartmentViewModel department) {
             if (ModelState.IsValid)
             {
                

@@ -15,7 +15,7 @@ namespace DataAccess.Models.EmployeeModule
         public string Name { get; set; } = null!;
         [Range(24,50)]
         public int Age { get; set; }
-    
+        [MaxLength(50)]
         public string Address { get; set; } = null!;
 
         public decimal Salary { get; set; }
@@ -29,5 +29,8 @@ namespace DataAccess.Models.EmployeeModule
         public DateTime HiringDate { get; set; }
         public EmployeeType EmployeeType { get; set; }
         public Gender Gender { get; set; }
+
+        public virtual Department? Department { get; set; }
+        public int? DepartmentId { get; set; }
     }
 }
