@@ -24,5 +24,8 @@ namespace BuisnessLogic.DTOS.EmployeeDtos
         [Display(Name = "Department Name")]
 
         public string? DepartmentName { get; set; }
+
+        [Display(Name="Image")]
+        public string? ImageName { get; set; }
     }
 }

@@ -1,9 +1,12 @@
 using BuisnessLogic.Profiles;
+using BuisnessLogic.Services.AttatchmentServices;
 using BuisnessLogic.Services.Classes;
 using BuisnessLogic.Services.Interfaces;
 using DataAccess.Data.context;
 using DataAccess.Data.Repositories.Classes;
 using DataAccess.Data.Repositories.Interfaces;
+using DataAccess.Models.IdentityModule;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 
 namespace Demo.Presentation
@@ -25,11 +28,15 @@ namespace Demo.Presentation
                 options.UseLazyLoadingProxies();
             });
 
-            builder.Services.AddScoped<IDepartmentRepository, DepartmentRepository>();
+            
             builder.Services.AddScoped<IDepartmentService, DepartmentService>();
-            builder.Services.AddScoped<IEmployeeRepository, EmployeeRepository>();
+
             builder.Services.AddScoped<IEmployeeServices, EmployeeServices>();
             builder.Services.AddAutoMapper(mapper => mapper.AddProfile(new MappingProfile()));
+            builder.Services.AddScoped<IAttachmentServices, AttachmentServices>();
+            builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
+            builder.Services.AddIdentity<ApplicationUser, IdentityRole>()
+                .AddEntityFrameworkStores<ApplicationDbContext>();
             var app = builder.Build();
 
             // Configure the HTTP request pipeline.
@@ -45,11 +52,12 @@ namespace Demo.Presentation
 
             app.UseRouting();
 
+            app.UseAuthentication();
             app.UseAuthorization();
 
             app.MapControllerRoute(
                 name: "default",
-                pattern: "{controller=Home}/{action=Index}/{id?}");
+                pattern: "{controller=Account}/{action=Regist}/{id?}");
 
             app.Run();
         }

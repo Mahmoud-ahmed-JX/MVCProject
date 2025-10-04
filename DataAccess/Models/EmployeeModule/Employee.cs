@@ -32,5 +32,7 @@ namespace DataAccess.Models.EmployeeModule
 
         public virtual Department? Department { get; set; }
         public int? DepartmentId { get; set; }
+
+        public string? ImageName { get; set; }
     }
 }

@@ -1,14 +1,17 @@
 ﻿using BuisnessLogic.DTOS.DepartmentDtos;
 using BuisnessLogic.DTOS.EmployeeDtos;
+using BuisnessLogic.Services.AttatchmentServices;
 using BuisnessLogic.Services.Classes;
 using BuisnessLogic.Services.Interfaces;
 using DataAccess.Models.EmployeeModule;
 using DataAccess.Models.Shared;
 using Demo.Presentation.ViewModels;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Demo.Presentation.Controllers
 {
+    [Authorize]
     public class EmployeeController(IEmployeeServices _employeeService, IWebHostEnvironment _env, ILogger<EmployeeController> _logger) : Controller
     {
         #region Index
@@ -45,6 +48,7 @@ namespace Demo.Presentation.Controllers
                         Gender= employeeVM.Gender,
                         EmployeeType = employeeVM.EmployeeType,
                         DepartmentId = employeeVM.DepartmentId,
+                        Image= employeeVM.Image,
 
                     });
 

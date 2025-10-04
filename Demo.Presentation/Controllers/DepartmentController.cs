@@ -3,10 +3,12 @@ using BuisnessLogic.DTOS.DepartmentDtos;
 using BuisnessLogic.Services.Classes;
 using BuisnessLogic.Services.Interfaces;
 using Demo.Presentation.ViewModels;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Demo.Presentation.Controllers
 {
+    [Authorize]
     public class DepartmentController(IDepartmentService _departmentService,IWebHostEnvironment _env,ILogger<DepartmentController> _logger) : Controller
     {
         //    private readonly DepartmentService _departmentService = departmentService;
